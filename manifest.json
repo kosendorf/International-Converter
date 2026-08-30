@@ -1,6 +1,6 @@
 {
-  "name": "Universal PWA Converter",
-  "short_name": "Converter",
+  "name": "International Converter",
+  "short_name": "Intl Converter",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f4f4f9",

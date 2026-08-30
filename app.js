@@ -94,21 +94,27 @@ async function fetchRates() {
         exchangeRates['EUR'] = 1; // Base rate
         currencyNames['EUR'] = "Euro"; 
         
+        const fetchTime = new Date().toLocaleTimeString();
+        
         // Save to cache for offline use
         localStorage.setItem('cachedRates', JSON.stringify(exchangeRates));
         localStorage.setItem('cachedNames', JSON.stringify(currencyNames));
+        localStorage.setItem('cachedDate', data.date);
+        localStorage.setItem('cachedTime', fetchTime);
         
         populateDropdowns();
-        statusText.textContent = `Rates updated: ${data.date} (Offline Ready)`;
+        statusText.textContent = `Rates updated: ${data.date} at ${fetchTime} (Offline Ready)`;
     } catch (err) {
         const cachedRates = localStorage.getItem('cachedRates');
         const cachedNames = localStorage.getItem('cachedNames');
+        const cachedDate = localStorage.getItem('cachedDate') || 'Unknown Date';
+        const cachedTime = localStorage.getItem('cachedTime') || 'Unknown Time';
         
         if (cachedRates && cachedNames) {
             exchangeRates = JSON.parse(cachedRates);
             currencyNames = JSON.parse(cachedNames);
             populateDropdowns();
-            statusText.textContent = "Offline Mode: Using cached rates";
+            statusText.textContent = `Offline Mode: Using cached rates from ${cachedDate} at ${cachedTime}`;
         } else {
             statusText.textContent = "Error: No connection and no cached rates.";
         }
