@@ -202,10 +202,30 @@ window.pushToCurrency = (isToField) => {
     }
 };
 
-// --- Register Service Worker ---
+// --- Register Service Worker with Auto-Update Logic ---
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js')
+            .then(reg => {
+                // Listen for incoming updates to the service worker
+                reg.addEventListener('updatefound', () => {
+                    const newWorker = reg.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            // A new update is ready and the new service worker skipped waiting.
+                            window.location.reload();
+                        }
+                    });
+                });
+            })
             .catch(err => console.error('Service Worker registration failed:', err));
+    });
+
+    // Reload the page when the service worker controller changes
+    let refreshing;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        window.location.reload();
     });
 }
