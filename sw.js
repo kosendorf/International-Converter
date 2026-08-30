@@ -1,4 +1,4 @@
-const CACHE_NAME = 'weight-converter-v2';
+const CACHE_NAME = 'universal-converter-v3';
 const urlsToCache = [
   './',
   './index.html',

@@ -1,6 +1,6 @@
 {
-  "name": "Bi-directional Weight Converter",
-  "short_name": "Weight Converter",
+  "name": "Universal Unit Converter",
+  "short_name": "Converter",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#f4f4f9",
