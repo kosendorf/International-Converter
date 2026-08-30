@@ -1,5 +1,5 @@
 {
-  "name": "Kilo to Pound Converter",
+  "name": "Bi-directional Weight Converter",
   "short_name": "Weight Converter",
   "start_url": "./",
   "display": "standalone",
