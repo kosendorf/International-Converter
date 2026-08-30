@@ -18,7 +18,49 @@ h1 {
     text-align: center;
     color: #222;
     margin-top: 0;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    background: #e2e2ea;
+    padding: 0.25rem;
+    border-radius: 8px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.6rem;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #555;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.tab-btn.active {
+    background: #ffffff;
+    color: #007bff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.view-section {
+    display: none;
+    animation: fadeIn 0.3s ease;
+}
+
+.view-section.active {
+    display: block;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .card {
@@ -31,20 +73,24 @@ h1 {
 
 .card h2 {
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     color: #007bff;
     font-size: 1.2rem;
     border-bottom: 2px solid #f0f0f5;
     padding-bottom: 0.5rem;
 }
 
-.input-group {
+.status-text {
+    font-size: 0.8rem;
+    color: #888;
+    margin-top: 0;
     margin-bottom: 1rem;
 }
 
-.input-group:last-child {
-    margin-bottom: 0;
+.input-group {
+    margin-bottom: 1rem;
 }
+.input-group:last-child { margin-bottom: 0; }
 
 label {
     display: block;
@@ -54,7 +100,7 @@ label {
     color: #444;
 }
 
-input {
+input, select {
     width: 100%;
     padding: 0.65rem 0.75rem;
     border: 1px solid #ccc;
@@ -64,8 +110,20 @@ input {
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-input:focus {
+input:focus, select:focus {
     outline: none;
     border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
+.currency-row {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.currency-row select {
+    flex: 1;
+}
+.currency-row input {
+    flex: 1;
 }

@@ -4,49 +4,101 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#007bff">
-    <title>Unit Converter</title>
+    <title>Universal PWA Converter</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
 </head>
 <body>
     <div class="wrapper">
-        <h1>Unit Converter</h1>
+        <h1>Universal Converter</h1>
         
-        <div class="card">
-            <h2>Weight</h2>
-            <div class="input-group">
-                <label for="kilos">Kilograms (kg):</label>
-                <input type="number" id="kilos" placeholder="0.00" step="any">
+        <div class="tabs">
+            <button id="btn-units" class="tab-btn active">Units</button>
+            <button id="btn-currency" class="tab-btn">Currency</button>
+        </div>
+        
+        <!-- UNIT CONVERTER VIEW -->
+        <div id="view-units" class="view-section active">
+            <div class="card">
+                <h2>Weight</h2>
+                <div class="input-group">
+                    <label for="kilos">Kilograms (kg):</label>
+                    <input type="number" id="kilos" placeholder="0.00" step="any">
+                </div>
+                <div class="input-group">
+                    <label for="pounds">Pounds (lbs):</label>
+                    <input type="number" id="pounds" placeholder="0.00" step="any">
+                </div>
             </div>
-            <div class="input-group">
-                <label for="pounds">Pounds (lbs):</label>
-                <input type="number" id="pounds" placeholder="0.00" step="any">
+
+            <div class="card">
+                <h2>Speed</h2>
+                <div class="input-group">
+                    <label for="kph">Kilometers per Hour (kph):</label>
+                    <input type="number" id="kph" placeholder="0.00" step="any">
+                </div>
+                <div class="input-group">
+                    <label for="mph">Miles per Hour (mph):</label>
+                    <input type="number" id="mph" placeholder="0.00" step="any">
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Distance</h2>
+                <div class="input-group">
+                    <label for="km">Kilometers (km):</label>
+                    <input type="number" id="km" placeholder="0.00" step="any">
+                </div>
+                <div class="input-group">
+                    <label for="miles">Miles (mi):</label>
+                    <input type="number" id="miles" placeholder="0.00" step="any">
+                </div>
+            </div>
+        </div>
+        
+        <!-- CURRENCY CONVERTER VIEW -->
+        <div id="view-currency" class="view-section">
+            <div class="card">
+                <h2>Live Exchange Rates</h2>
+                <p id="currency-status" class="status-text">Fetching rates...</p>
+                <div class="input-group">
+                    <label for="currency-from">From:</label>
+                    <div class="currency-row">
+                        <select id="currency-from">
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                        </select>
+                        <input type="number" id="amount-from" placeholder="0.00" step="any">
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="currency-to">To:</label>
+                    <div class="currency-row">
+                        <select id="currency-to">
+                            <option value="EUR">EUR - Euro</option>
+                            <option value="USD">USD - US Dollar</option>
+                            <option value="GBP">GBP - British Pound</option>
+                            <option value="JPY">JPY - Japanese Yen</option>
+                            <option value="CAD">CAD - Canadian Dollar</option>
+                            <option value="AUD">AUD - Australian Dollar</option>
+                            <option value="CHF">CHF - Swiss Franc</option>
+                            <option value="CNY">CNY - Chinese Yuan</option>
+                            <option value="INR">INR - Indian Rupee</option>
+                        </select>
+                        <input type="number" id="amount-to" placeholder="0.00" step="any">
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="card">
-            <h2>Speed</h2>
-            <div class="input-group">
-                <label for="kph">Kilometers per Hour (kph):</label>
-                <input type="number" id="kph" placeholder="0.00" step="any">
-            </div>
-            <div class="input-group">
-                <label for="mph">Miles per Hour (mph):</label>
-                <input type="number" id="mph" placeholder="0.00" step="any">
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Distance</h2>
-            <div class="input-group">
-                <label for="km">Kilometers (km):</label>
-                <input type="number" id="km" placeholder="0.00" step="any">
-            </div>
-            <div class="input-group">
-                <label for="miles">Miles (mi):</label>
-                <input type="number" id="miles" placeholder="0.00" step="any">
-            </div>
-        </div>
     </div>
     <script src="./app.js"></script>
 </body>

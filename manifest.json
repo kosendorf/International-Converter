@@ -1,5 +1,5 @@
 {
-  "name": "Universal Unit Converter",
+  "name": "Universal PWA Converter",
   "short_name": "Converter",
   "start_url": "./",
   "display": "standalone",
