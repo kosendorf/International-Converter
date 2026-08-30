@@ -109,11 +109,11 @@
                     <button type="button" onclick="calcClear()">C</button>
                     <button type="button" onclick="calcOp('+')">+</button>
                     
-                    <button type="button" onclick="calcCalculate()" style="grid-column: span 4; background-color: #007bff; color: white;">=</button>
+                    <button type="button" class="push-anim" onclick="calcCalculate()" style="grid-column: span 4; background-color: #007bff; color: white;">=</button>
                 </div>
                 <div class="calc-actions" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                    <button type="button" class="tab-btn" style="border: 1px solid #ccc; background: white;" onclick="pushToCurrency(false)">Send to 'From'</button>
-                    <button type="button" class="tab-btn" style="border: 1px solid #ccc; background: white;" onclick="pushToCurrency(true)">Send to 'To'</button>
+                    <button type="button" class="tab-btn push-anim" style="border: 1px solid #ccc; background: white;" onclick="pushToCurrency(false)">Send to 'From'</button>
+                    <button type="button" class="tab-btn push-anim" style="border: 1px solid #ccc; background: white;" onclick="pushToCurrency(true)">Send to 'To'</button>
                 </div>
             </div>
         </div>
