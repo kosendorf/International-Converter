@@ -1,4 +1,4 @@
-const CACHE_NAME = 'intl-converter-v9';
+const CACHE_NAME = 'intl-converter-v10';
 const urlsToCache = [
   './',
   './index.html',
