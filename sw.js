@@ -1,4 +1,4 @@
-const CACHE_NAME = 'intl-converter-v12';
+const CACHE_NAME = 'intl-converter-v13';
 const urlsToCache = [
   './',
   './index.html',
@@ -6,7 +6,8 @@ const urlsToCache = [
   './app.js',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './apple-touch-icon.png'
 ];
 
 self.addEventListener('install', event => {

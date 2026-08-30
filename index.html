@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#007bff">
-    <title>International Converter</title>
-    <link rel="stylesheet" href="./style.css">
-    <link rel="manifest" href="./manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="Intl Converter">
-    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#007bff">
+    <title>International Converter</title>
+    <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
 </head>
 <body>
     <div class="wrapper">
@@ -69,7 +69,6 @@
                     <label for="currency-from">From:</label>
                     <div class="currency-row">
                         <select id="currency-from">
-                            <!-- Populated dynamically via app.js -->
                         </select>
                         <input type="number" id="amount-from" placeholder="0.00" step="any">
                     </div>
@@ -79,7 +78,6 @@
                     <label for="currency-to">To:</label>
                     <div class="currency-row">
                         <select id="currency-to">
-                            <!-- Populated dynamically via app.js -->
                         </select>
                         <input type="number" id="amount-to" placeholder="0.00" step="any">
                     </div>
@@ -113,7 +111,6 @@
                     <button type="button" onclick="calcClear()">C</button>
                     <button type="button" onclick="calcOp('+')">+</button>
                     
-                    <!-- Backspace and Equals -->
                     <button type="button" class="push-anim" onclick="calcBackSpace()" style="grid-column: span 2; background-color: #f1f1f6;">⌫ Backspace</button>
                     <button type="button" class="push-anim" onclick="calcCalculate()" style="grid-column: span 2; background-color: #007bff; color: white;">=</button>
                 </div>
