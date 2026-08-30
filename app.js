@@ -74,8 +74,8 @@ function populateDropdowns() {
         curTo.appendChild(optTo);
     });
 
-    curFrom.value = 'USD';
-    curTo.value = 'EUR';
+    curFrom.value = localStorage.getItem('selectedFrom') || 'USD';
+    curTo.value = localStorage.getItem('selectedTo') || 'EUR';
 }
 
 async function fetchRates() {
@@ -139,8 +139,14 @@ function calculateCurrency(reverse) {
 
 amtFrom.addEventListener('input', () => calculateCurrency(false));
 amtTo.addEventListener('input', () => calculateCurrency(true));
-curFrom.addEventListener('change', () => calculateCurrency(false));
-curTo.addEventListener('change', () => calculateCurrency(false));
+curFrom.addEventListener('change', () => {
+    localStorage.setItem('selectedFrom', curFrom.value);
+    calculateCurrency(false);
+});
+curTo.addEventListener('change', () => {
+    localStorage.setItem('selectedTo', curTo.value);
+    calculateCurrency(false);
+});
 
 fetchRates();
 
