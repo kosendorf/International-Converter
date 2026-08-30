@@ -1,4 +1,4 @@
-const CACHE_NAME = 'universal-converter-v4';
+const CACHE_NAME = 'universal-converter-v5';
 const urlsToCache = [
   './',
   './index.html',
@@ -16,7 +16,6 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
-  // Only intercept same-origin requests (let API calls go to network)
   if (event.request.url.startsWith(self.location.origin)) {
     event.respondWith(
       caches.match(event.request).then(response => response || fetch(event.request))

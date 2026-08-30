@@ -52,25 +52,68 @@ const amtTo = document.getElementById('amount-to');
 const statusText = document.getElementById('currency-status');
 
 let exchangeRates = {};
+let currencyNames = {};
+
+function populateDropdowns() {
+    curFrom.innerHTML = '';
+    curTo.innerHTML = '';
+    
+    // Sort keys alphabetically
+    const keys = Object.keys(exchangeRates).sort();
+    
+    keys.forEach(code => {
+        const name = currencyNames[code] || code;
+        
+        const optFrom = document.createElement('option');
+        optFrom.value = code;
+        optFrom.textContent = `${code} - ${name}`;
+        curFrom.appendChild(optFrom);
+        
+        const optTo = document.createElement('option');
+        optTo.value = code;
+        optTo.textContent = `${code} - ${name}`;
+        curTo.appendChild(optTo);
+    });
+
+    curFrom.value = 'USD';
+    curTo.value = 'EUR';
+}
 
 async function fetchRates() {
     try {
-        const res = await fetch('https://api.frankfurter.dev/v1/latest');
-        const data = await res.json();
+        // Fetch currency names and rates concurrently
+        const [namesRes, ratesRes] = await Promise.all([
+            fetch('https://api.frankfurter.dev/v1/currencies'),
+            fetch('https://api.frankfurter.dev/v1/latest')
+        ]);
+        
+        currencyNames = await namesRes.json();
+        const data = await ratesRes.json();
+        
         exchangeRates = data.rates;
-        exchangeRates['EUR'] = 1; // Frankfurter base is EUR by default
+        exchangeRates['EUR'] = 1; // Base rate
+        currencyNames['EUR'] = "Euro"; 
+        
+        // Save to cache for offline use
         localStorage.setItem('cachedRates', JSON.stringify(exchangeRates));
+        localStorage.setItem('cachedNames', JSON.stringify(currencyNames));
+        
+        populateDropdowns();
         statusText.textContent = `Rates updated: ${data.date} (Offline Ready)`;
     } catch (err) {
-        const cached = localStorage.getItem('cachedRates');
-        if (cached) {
-            exchangeRates = JSON.parse(cached);
+        const cachedRates = localStorage.getItem('cachedRates');
+        const cachedNames = localStorage.getItem('cachedNames');
+        
+        if (cachedRates && cachedNames) {
+            exchangeRates = JSON.parse(cachedRates);
+            currencyNames = JSON.parse(cachedNames);
+            populateDropdowns();
             statusText.textContent = "Offline Mode: Using cached rates";
         } else {
             statusText.textContent = "Error: No connection and no cached rates.";
         }
     }
-    // Re-calculate if numbers exist
+    
     if (amtFrom.value) calculateCurrency(false);
 }
 
@@ -83,7 +126,6 @@ function calculateCurrency(reverse) {
     if (!reverse) {
         const val = parseFloat(amtFrom.value);
         if (isNaN(val)) return amtTo.value = '';
-        // Convert to base (EUR), then to target
         amtTo.value = ((val / rateFrom) * rateTo).toFixed(2);
     } else {
         const val = parseFloat(amtTo.value);
@@ -97,7 +139,6 @@ amtTo.addEventListener('input', () => calculateCurrency(true));
 curFrom.addEventListener('change', () => calculateCurrency(false));
 curTo.addEventListener('change', () => calculateCurrency(false));
 
-// Initialize Currency Rates
 fetchRates();
 
 // --- Register Service Worker ---
