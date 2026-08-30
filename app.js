@@ -165,11 +165,16 @@ window.calcClear = () => {
     calcDisplay.value = '';
 };
 
+window.calcBackSpace = () => {
+    if (calcVal.length > 0) {
+        calcVal = calcVal.slice(0, -1);
+        calcDisplay.value = calcVal;
+    }
+};
+
 window.calcCalculate = () => {
     try {
-        // Safe evaluation of basic math string
         calcVal = new Function('return ' + calcVal)().toString();
-        // Limit to 2 decimal places if it's a float
         if (calcVal.includes('.')) {
             calcVal = parseFloat(calcVal).toFixed(2);
         }
