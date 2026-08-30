@@ -1,12 +1,12 @@
-const CACHE_NAME = 'intl-converter-v11';
+const CACHE_NAME = 'intl-converter-v12';
 const urlsToCache = [
   './',
   './index.html',
   './style.css',
   './app.js',
   './manifest.json',
-  './icon-192.jpg',
-  './icon-512.jpg'
+  './icon-192.png',
+  './icon-512.png'
 ];
 
 self.addEventListener('install', event => {
