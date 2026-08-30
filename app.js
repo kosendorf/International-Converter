@@ -58,7 +58,6 @@ function populateDropdowns() {
     curFrom.innerHTML = '';
     curTo.innerHTML = '';
     
-    // Sort keys alphabetically
     const keys = Object.keys(exchangeRates).sort();
     
     keys.forEach(code => {
@@ -81,7 +80,6 @@ function populateDropdowns() {
 
 async function fetchRates() {
     try {
-        // Fetch currency names and rates concurrently
         const [namesRes, ratesRes] = await Promise.all([
             fetch('https://api.frankfurter.dev/v1/currencies'),
             fetch('https://api.frankfurter.dev/v1/latest')
@@ -91,12 +89,11 @@ async function fetchRates() {
         const data = await ratesRes.json();
         
         exchangeRates = data.rates;
-        exchangeRates['EUR'] = 1; // Base rate
+        exchangeRates['EUR'] = 1; 
         currencyNames['EUR'] = "Euro"; 
         
         const fetchTime = new Date().toLocaleTimeString();
         
-        // Save to cache for offline use
         localStorage.setItem('cachedRates', JSON.stringify(exchangeRates));
         localStorage.setItem('cachedNames', JSON.stringify(currencyNames));
         localStorage.setItem('cachedDate', data.date);
@@ -146,6 +143,53 @@ curFrom.addEventListener('change', () => calculateCurrency(false));
 curTo.addEventListener('change', () => calculateCurrency(false));
 
 fetchRates();
+
+// --- Calculator Logic ---
+const calcDisplay = document.getElementById('calc-display');
+let calcVal = '';
+
+window.calcAppend = (val) => {
+    calcVal += val;
+    calcDisplay.value = calcVal;
+};
+
+window.calcOp = (op) => {
+    if (calcVal !== '' && !isNaN(calcVal.slice(-1))) {
+        calcVal += op;
+        calcDisplay.value = calcVal;
+    }
+};
+
+window.calcClear = () => {
+    calcVal = '';
+    calcDisplay.value = '';
+};
+
+window.calcCalculate = () => {
+    try {
+        // Safe evaluation of basic math string
+        calcVal = new Function('return ' + calcVal)().toString();
+        // Limit to 2 decimal places if it's a float
+        if (calcVal.includes('.')) {
+            calcVal = parseFloat(calcVal).toFixed(2);
+        }
+        calcDisplay.value = calcVal;
+    } catch (e) {
+        calcDisplay.value = 'Error';
+        calcVal = '';
+    }
+};
+
+window.pushToCurrency = (isToField) => {
+    if (!calcDisplay.value || calcDisplay.value === 'Error') return;
+    if (isToField) {
+        amtTo.value = calcDisplay.value;
+        calculateCurrency(true);
+    } else {
+        amtFrom.value = calcDisplay.value;
+        calculateCurrency(false);
+    }
+};
 
 // --- Register Service Worker ---
 if ('serviceWorker' in navigator) {

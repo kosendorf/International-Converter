@@ -127,3 +127,22 @@ input:focus, select:focus {
 .currency-row input {
     flex: 1;
 }
+
+/* Calculator Additions */
+.calc-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+}
+.calc-grid button {
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f9f9f9;
+    cursor: pointer;
+    transition: background 0.1s;
+}
+.calc-grid button:active {
+    background: #e2e2ea;
+}
