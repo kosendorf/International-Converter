@@ -119,6 +119,17 @@ async function fetchRates() {
     if (amtFrom.value) calculateCurrency(false);
 }
 
+function formatString(str) {
+    if (!str) return '';
+    let raw = str.toString().replace(/[^0-9.]/g, '');
+    let parts = raw.split('.');
+    if (parts.length > 2) {
+        parts = [parts[0], parts.slice(1).join('')];
+    }
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join('.');
+}
+
 function calculateCurrency(reverse) {
     if (!exchangeRates[curFrom.value] || !exchangeRates[curTo.value]) return;
     
@@ -126,18 +137,24 @@ function calculateCurrency(reverse) {
     const rateTo = exchangeRates[curTo.value];
     
     if (!reverse) {
-        const val = parseFloat(amtFrom.value);
+        const val = parseFloat(amtFrom.value.replace(/,/g, ''));
         if (isNaN(val)) return amtTo.value = '';
-        amtTo.value = ((val / rateFrom) * rateTo).toFixed(2);
+        amtTo.value = formatString(((val / rateFrom) * rateTo).toFixed(2));
     } else {
-        const val = parseFloat(amtTo.value);
+        const val = parseFloat(amtTo.value.replace(/,/g, ''));
         if (isNaN(val)) return amtFrom.value = '';
-        amtFrom.value = ((val / rateTo) * rateFrom).toFixed(2);
+        amtFrom.value = formatString(((val / rateTo) * rateFrom).toFixed(2));
     }
 }
 
-amtFrom.addEventListener('input', () => calculateCurrency(false));
-amtTo.addEventListener('input', () => calculateCurrency(true));
+amtFrom.addEventListener('input', (e) => {
+    e.target.value = formatString(e.target.value);
+    calculateCurrency(false);
+});
+amtTo.addEventListener('input', (e) => {
+    e.target.value = formatString(e.target.value);
+    calculateCurrency(true);
+});
 curFrom.addEventListener('change', () => {
     localStorage.setItem('selectedFrom', curFrom.value);
     calculateCurrency(false);
@@ -153,27 +170,35 @@ fetchRates();
 const calcDisplay = document.getElementById('calc-display');
 let calcVal = '';
 
+function updateCalcDisplay() {
+    if (calcVal === '') {
+        calcDisplay.value = '';
+        return;
+    }
+    calcDisplay.value = calcVal.replace(/\d+(\.\d+)?/g, match => formatString(match));
+}
+
 window.calcAppend = (val) => {
     calcVal += val;
-    calcDisplay.value = calcVal;
+    updateCalcDisplay();
 };
 
 window.calcOp = (op) => {
     if (calcVal !== '' && !isNaN(calcVal.slice(-1))) {
         calcVal += op;
-        calcDisplay.value = calcVal;
+        updateCalcDisplay();
     }
 };
 
 window.calcClear = () => {
     calcVal = '';
-    calcDisplay.value = '';
+    updateCalcDisplay();
 };
 
 window.calcBackSpace = () => {
     if (calcVal.length > 0) {
         calcVal = calcVal.slice(0, -1);
-        calcDisplay.value = calcVal;
+        updateCalcDisplay();
     }
 };
 
@@ -185,7 +210,7 @@ window.calcCalculate = () => {
         if (calcVal.includes('.')) {
             calcVal = parseFloat(calcVal).toFixed(2);
         }
-        calcDisplay.value = calcVal;
+        updateCalcDisplay();
     } catch (e) {
         calcDisplay.value = 'Error';
         calcVal = '';
@@ -193,12 +218,23 @@ window.calcCalculate = () => {
 };
 
 window.pushToCurrency = (isToField) => {
-    if (!calcDisplay.value || calcDisplay.value === 'Error') return;
+    if (!calcVal || calcDisplay.value === 'Error') return;
+    
+    try {
+        calcVal = new Function('return ' + calcVal)().toString();
+        if (calcVal.includes('.')) {
+            calcVal = parseFloat(calcVal).toFixed(2);
+        }
+        updateCalcDisplay();
+    } catch (e) {
+        return;
+    }
+    
     if (isToField) {
-        amtTo.value = calcDisplay.value;
+        amtTo.value = formatString(calcVal);
         calculateCurrency(true);
     } else {
-        amtFrom.value = calcDisplay.value;
+        amtFrom.value = formatString(calcVal);
         calculateCurrency(false);
     }
 };

@@ -68,18 +68,17 @@
                 <div class="input-group">
                     <label for="currency-from">From:</label>
                     <div class="currency-row">
-                        <select id="currency-from">
-                        </select>
-                        <input type="number" id="amount-from" placeholder="0.00" step="any">
+                        <select id="currency-from"></select>
+                        <!-- Changed to text with inputmode to support comma formatting -->
+                        <input type="text" inputmode="decimal" id="amount-from" placeholder="0.00">
                     </div>
                 </div>
                 
                 <div class="input-group">
                     <label for="currency-to">To:</label>
                     <div class="currency-row">
-                        <select id="currency-to">
-                        </select>
-                        <input type="number" id="amount-to" placeholder="0.00" step="any">
+                        <select id="currency-to"></select>
+                        <input type="text" inputmode="decimal" id="amount-to" placeholder="0.00">
                     </div>
                 </div>
             </div>
