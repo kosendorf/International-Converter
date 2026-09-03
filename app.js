@@ -52,7 +52,6 @@ const amtTo = document.getElementById('amount-to');
 const statusText = document.getElementById('currency-status');
 
 let exchangeRates = {};
-let currencyNames = {};
 
 function populateDropdowns() {
     curFrom.innerHTML = '';
@@ -60,8 +59,16 @@ function populateDropdowns() {
     
     const keys = Object.keys(exchangeRates).sort();
     
+    // Use built-in browser API to translate currency codes to names automatically
+    const displayNames = new Intl.DisplayNames(['en'], {type: 'currency'});
+    
     keys.forEach(code => {
-        const name = currencyNames[code] || code;
+        let name = code;
+        try {
+            name = displayNames.of(code);
+        } catch(e) {
+            // Fallback to code if browser doesn't recognize it
+        }
         
         const optFrom = document.createElement('option');
         optFrom.value = code;
@@ -80,36 +87,28 @@ function populateDropdowns() {
 
 async function fetchRates() {
     try {
-        const [namesRes, ratesRes] = await Promise.all([
-            fetch('https://api.frankfurter.dev/v1/currencies'),
-            fetch('https://api.frankfurter.dev/v1/latest')
-        ]);
-        
-        currencyNames = await namesRes.json();
+        // Switched to ExchangeRate-API open endpoint for 160+ free currencies including AED & VND
+        const ratesRes = await fetch('https://open.er-api.com/v6/latest/USD');
         const data = await ratesRes.json();
         
         exchangeRates = data.rates;
-        exchangeRates['EUR'] = 1; 
-        currencyNames['EUR'] = "Euro"; 
         
         const fetchTime = new Date().toLocaleTimeString();
+        const fetchDate = new Date().toLocaleDateString();
         
         localStorage.setItem('cachedRates', JSON.stringify(exchangeRates));
-        localStorage.setItem('cachedNames', JSON.stringify(currencyNames));
-        localStorage.setItem('cachedDate', data.date);
+        localStorage.setItem('cachedDate', fetchDate);
         localStorage.setItem('cachedTime', fetchTime);
         
         populateDropdowns();
-        statusText.textContent = `Rates updated: ${data.date} at ${fetchTime} (Offline Ready)`;
+        statusText.textContent = `Rates updated: ${fetchDate} at ${fetchTime} (Offline Ready)`;
     } catch (err) {
         const cachedRates = localStorage.getItem('cachedRates');
-        const cachedNames = localStorage.getItem('cachedNames');
         const cachedDate = localStorage.getItem('cachedDate') || 'Unknown Date';
         const cachedTime = localStorage.getItem('cachedTime') || 'Unknown Time';
         
-        if (cachedRates && cachedNames) {
+        if (cachedRates) {
             exchangeRates = JSON.parse(cachedRates);
-            currencyNames = JSON.parse(cachedNames);
             populateDropdowns();
             statusText.textContent = `Offline Mode: Using cached rates from ${cachedDate} at ${cachedTime}`;
         } else {
@@ -180,7 +179,9 @@ window.calcBackSpace = () => {
 
 window.calcCalculate = () => {
     try {
+        // Safe evaluation of basic math string
         calcVal = new Function('return ' + calcVal)().toString();
+        // Limit to 2 decimal places if it's a float
         if (calcVal.includes('.')) {
             calcVal = parseFloat(calcVal).toFixed(2);
         }
